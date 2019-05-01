@@ -3,12 +3,12 @@ import time, math, functools
 def timer(func):
 
     @functools.wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(self, *args, **kwargs):
         start_time = time.perf_counter()
-        value = func(*args, **kwargs)
+        value = func(self, *args, **kwargs)
         end_time = time.perf_counter()
         run_time = (end_time - start_time)*(10**6)
-        print(f"Finished {func.__name__!r} in {run_time:.3f} secs")
+        self.timer_dict[run_time] = func.__name__
         return value
     return wrapper
 
