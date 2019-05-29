@@ -50,12 +50,12 @@ input_list = [
 ['Jake', 80, 88, 96],
 ]
 
-p_lower = []
-m_lower = []
-c_lower = []
+phys_dict = {}
+math_dict = {}
+chem_dict = {}
 
 
-def insert_smallest( subject_list, name, score ):
+def insert_smallest_list( subject_list, name, score ):
     """
     maintains a subject list of lowest two scores
     if equal scores, it prefers to have the name that comes first in lexicographic order
@@ -81,7 +81,6 @@ def insert_smallest( subject_list, name, score ):
         if subject_list[0][1] > score:
             subject_list[0], subject_list[1] = [name,score], subject_list[0]
 
-        # if score is equal to the smallest score
         if subject_list[1][1] == score:
             if subject_list[1][0] > name:
                 subject_list[1] = [name,score]
@@ -89,22 +88,41 @@ def insert_smallest( subject_list, name, score ):
             if subject_list[0][0] > name:
                 subject_list[0], subject_list[1] = [name,score], subject_list[0]
 
-
+def insert_smallest(score_dict, name , score):
+    if len(score_dict) < 2:
+        if score not in score_dict:
+            score_dict[score] = [name]
+        else:
+            score_dict[score].append(name)
+    else:
+        scores = sorted(score_dict.keys())
+        if score in score_dict:
+            score_dict[score].append(name)
+        elif score < scores[1]:
+            del score_dict[scores[1]]
+            score_dict[score] = [name]
 
 for i, row in enumerate(input_list):
-    if i == 0:
-        p_lower.append( [row[0], row[1]] )
-        m_lower.append( [row[0], row[2]] )
-        c_lower.append( [row[0], row[3]] )
-    else:
-        insert_smallest(p_lower, row[0], row[1])
-        insert_smallest(m_lower, row[0], row[2])
-        insert_smallest(c_lower, row[0], row[3])
+    insert_smallest(phys_dict, row[0], row[1])
+    insert_smallest(math_dict, row[0], row[2])
+    insert_smallest(chem_dict, row[0], row[3])
 
-print("Phys lowest: ", p_lower)
-print("Math lowest: ", m_lower)
-print("Chem lowest: ", c_lower)
+print("\nphysics lowest: \n\t")
+for key in sorted(phys_dict.keys(), reverse=True):
+    for name in sorted(phys_dict[key]):
+        print(name, end=", ")
+    print("\n")
 
+print("\nmaths lowest: \n\t")
+for key in sorted(math_dict.keys(), reverse=True):
+    for name in sorted(math_dict[key]):
+        print (name,end=", ")
+    print("\n")
+print("\nchemistry lowest: \n\t")
+for key in sorted(chem_dict.keys(), reverse=True):
+    for name in  sorted(chem_dict[key]):
+        print(name, end=", ")
+    print("\n")
 
 
 
